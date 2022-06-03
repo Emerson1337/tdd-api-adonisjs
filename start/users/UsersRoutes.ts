@@ -1,3 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route';
+import UsersController from 'App/Controllers/Http/Users/UsersController';
 
-Route.post('/users', 'UsersController.store()');
+const usersController = new UsersController();
+
+Route.post('/users', usersController.store);
