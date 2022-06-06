@@ -1,6 +1,5 @@
+import { UserCreateDTO } from 'App/interfaces/users';
 import { User } from 'App/Models/User';
-
-import { UserCreateDTO } from '../../../../interfaces/users';
 
 export class UserRepository {
 	public async createUser(userPayload: UserCreateDTO) {
@@ -11,6 +10,12 @@ export class UserRepository {
 
 	public async getUserByEmail(email: string) {
 		const user = await User.findBy('email', email);
+
+		return user;
+	}
+
+	public async getUserByUsername(username: string) {
+		const user = await User.findBy('username', username);
 
 		return user;
 	}

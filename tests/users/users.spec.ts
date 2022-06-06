@@ -1,7 +1,9 @@
-import { UserFactory } from './../../database/factories/index';
+import Database from '@ioc:Adonis/Lucid/Database';
+import { assert } from '@japa/preset-adonis';
 import test from 'japa';
 import supertest from 'supertest';
-import Database from '@ioc:Adonis/Lucid/Database';
+
+import { UserFactory } from './../../database/factories/index';
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`;
 
@@ -10,7 +12,7 @@ test.group('User', (group) => {
 		const userPayload = {
 			email: 'test@test.com',
 			username: 'user',
-			password: '123',
+			password: '1234',
 			avatar:
 				'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
 		};
@@ -39,6 +41,74 @@ test.group('User', (group) => {
 		assert.include(body.message, 'email');
 		assert.equal(body.code, 'BAD_REQUEST');
 		assert.equal(body.status, 409);
+	});
+
+	test('It not should be able to create an user because username already exists', async (assert) => {
+		const { username, password, avatar } = await UserFactory.create();
+
+		const userPayload = {
+			email: 'test@gmail.com',
+			username,
+			password,
+			avatar,
+		};
+
+		const { body } = await supertest(BASE_URL).post('/users').send(userPayload).expect(409);
+
+		assert.include(body.message, 'username');
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 409);
+	});
+
+	test('It should return 422 when required data is not provided', async (assert) => {
+		const { body } = await supertest(BASE_URL).post('/users').send({}).expect(422);
+
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 422);
+	});
+
+	test('It should return 422 when email is invalid', async (assert) => {
+		const userPayload = {
+			email: 'testtest.com',
+			username: 'user',
+			password: '1234',
+			avatar:
+				'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
+		};
+
+		const { body } = await supertest(BASE_URL).post('/users').send(userPayload).expect(422);
+
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 422);
+	});
+
+	test('It should return 422 when username isnt provided', async (assert) => {
+		const userPayload = {
+			email: 'testtest.com',
+			password: '1234',
+			avatar:
+				'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
+		};
+
+		const { body } = await supertest(BASE_URL).post('/users').send(userPayload).expect(422);
+
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 422);
+	});
+
+	test('It should return 422 when password is too short', async (assert) => {
+		const userPayload = {
+			email: 'testtest.com',
+			username: 'user',
+			password: '123',
+			avatar:
+				'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
+		};
+
+		const { body } = await supertest(BASE_URL).post('/users').send(userPayload).expect(422);
+
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 422);
 	});
 
 	group.beforeEach(async () => {

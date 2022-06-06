@@ -1,18 +1,31 @@
-import { UserCreateDTO } from '../../../../interfaces/users';
+import { validator } from '@ioc:Adonis/Core/Validator';
+import BadRequest from 'App/Exceptions/BadRequestException';
+import { UserCreateDTO } from 'App/interfaces/users';
+import CreateUserValidator from 'App/Validators/CreateUserValidator';
+
 import { UserRepository } from '../Repositories';
 
 export class CreateUserService {
 	public async createUser(userPayload: UserCreateDTO) {
 		const userRepository: UserRepository = new UserRepository();
 
-		const userAlreadyExists = await userRepository.getUserByEmail(userPayload.email);
+		const createUserValidation = new CreateUserValidator(userPayload);
 
-		if (userAlreadyExists) {
-			return {
-				message: 'email already in use',
-				code: 'BAD_REQUEST',
-				status: 409,
-			};
+		await validator.validate({
+			schema: createUserValidation.schema,
+			data: userPayload,
+		});
+
+		const userEmailExists = await userRepository.getUserByEmail(userPayload.email);
+
+		if (userEmailExists) {
+			throw new BadRequest('email already in use', 409);
+		}
+
+		const usernameExists = await userRepository.getUserByUsername(userPayload.username);
+
+		if (usernameExists) {
+			throw new BadRequest('username already in use', 409);
 		}
 
 		const user = await userRepository.createUser(userPayload);
