@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import { UserCreateDTO } from 'App/interfaces/users';
+import { UserCreateDTO } from 'App/Interfaces/users';
 
 export interface CreateUserOptionsDTO {
 	userPayload: UserCreateDTO;

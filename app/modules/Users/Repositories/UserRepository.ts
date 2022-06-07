@@ -1,5 +1,5 @@
-import { UserUpdateDTO } from 'App/interfaces/users/UserUpdateDTO';
-import { UserCreateDTO } from 'App/interfaces/users';
+import { UserUpdateDTO } from 'App/Interfaces/users/UserUpdateDTO';
+import { UserCreateDTO } from 'App/Interfaces/users';
 import { User } from 'App/Models/User';
 
 export class UserRepository {

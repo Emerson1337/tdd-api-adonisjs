@@ -1,9 +1,9 @@
-import { UserUpdateDTO } from 'App/interfaces/users/UserUpdateDTO';
+import { UserUpdateDTO } from 'App/Interfaces/users/UserUpdateDTO';
 import { CreateUserService } from 'App/Modules/Users/Services';
-import { UpdateUserService } from 'App/modules/Users/Services/UpdateUserService';
+import { UpdateUserService } from 'App/Modules/Users/Services/UpdateUserService';
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import { UserCreateDTO } from 'App/interfaces/users';
+import { UserCreateDTO } from 'App/Interfaces/users';
 
 export default class UsersController {
 	public async store(ctx: HttpContextContract) {
