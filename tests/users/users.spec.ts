@@ -111,6 +111,31 @@ test.group('User', (group) => {
 		assert.equal(body.status, 422);
 	});
 
+	test('It not should be able to update an user', async (assert) => {
+		const { secure_id, password } = await UserFactory.create();
+
+		const email = 'newemail@user.com';
+		const avatar = 'https://github.com/emerson1337.png';
+
+		const userPayload = {
+			email,
+			password,
+			avatar,
+		};
+
+		const { body } = await supertest(BASE_URL)
+			.put(`/users/${secure_id}`)
+			.send(userPayload)
+			.expect(200);
+
+		console.log(body.user, body.user.email, body.user.avatar, body.user.secure_id);
+
+		assert.exists(body.user, 'User undefined');
+		assert.equal(body.user.email, email);
+		assert.exists(body.user.avatar, avatar);
+		assert.exists(body.user.secure_id, secure_id);
+	});
+
 	group.beforeEach(async () => {
 		await Database.beginGlobalTransaction();
 	});

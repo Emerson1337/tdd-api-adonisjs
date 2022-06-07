@@ -1,15 +1,15 @@
 import { validator } from '@ioc:Adonis/Core/Validator';
 import BadRequest from 'App/Exceptions/BadRequestException';
-import { UserCreateDTO } from 'App/interfaces/users';
 import CreateUserValidator from 'App/Validators/CreateUserValidator';
 
+import { CreateUserOptionsDTO } from '../DTOs/CreateUserOptionsDTO';
 import { UserRepository } from '../Repositories';
 
 export class CreateUserService {
-	public async createUser(userPayload: UserCreateDTO) {
+	public async createUser({ ctx, userPayload }: CreateUserOptionsDTO) {
 		const userRepository: UserRepository = new UserRepository();
 
-		const createUserValidation = new CreateUserValidator(userPayload);
+		const createUserValidation = new CreateUserValidator(ctx);
 
 		await validator.validate({
 			schema: createUserValidation.schema,
