@@ -3,10 +3,10 @@ import BadRequest from 'App/Exceptions/BadRequestException';
 import UpdateUserValidator from 'App/Validators/UpdateUserValidator';
 
 import { UpdateUserOptionsDTO } from '../DTOs/UpdateUserOptionsDTO';
-import { UserRepository } from '../Repositories';
+import { IUsersRepository } from '../Interfaces/IUsersRepository';
 
 export class UpdateUserService {
-	constructor(private userRepository: UserRepository) {}
+	constructor(private userRepository: IUsersRepository) {}
 
 	public async updateUser({ secureId, ctx, userPayload }: UpdateUserOptionsDTO) {
 		const updateUserValidator = new UpdateUserValidator(ctx);

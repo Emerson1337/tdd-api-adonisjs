@@ -3,10 +3,10 @@ import BadRequest from 'App/Exceptions/BadRequestException';
 import CreateUserValidator from 'App/Validators/CreateUserValidator';
 
 import { CreateUserOptionsDTO } from '../DTOs/CreateUserOptionsDTO';
-import { UserRepository } from '../Repositories';
+import { IUsersRepository } from '../Interfaces/IUsersRepository';
 
 export class CreateUserService {
-	constructor(private userRepository: UserRepository) {}
+	constructor(private userRepository: IUsersRepository) {}
 
 	public async createUser({ ctx, userPayload }: CreateUserOptionsDTO) {
 		const createUserValidation = new CreateUserValidator(ctx);
