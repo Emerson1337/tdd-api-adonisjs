@@ -6,11 +6,7 @@ import { CreateUserOptionsDTO } from '../DTOs/CreateUserOptionsDTO';
 import { UserRepository } from '../Repositories';
 
 export class CreateUserService {
-	private userRepository: UserRepository;
-
-	constructor() {
-		this.userRepository = new UserRepository();
-	}
+	constructor(private userRepository: UserRepository) {}
 
 	public async createUser({ ctx, userPayload }: CreateUserOptionsDTO) {
 		const createUserValidation = new CreateUserValidator(ctx);

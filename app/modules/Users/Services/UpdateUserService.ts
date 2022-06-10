@@ -6,11 +6,7 @@ import { UpdateUserOptionsDTO } from '../DTOs/UpdateUserOptionsDTO';
 import { UserRepository } from '../Repositories';
 
 export class UpdateUserService {
-	private userRepository: UserRepository;
-
-	constructor() {
-		this.userRepository = new UserRepository();
-	}
+	constructor(private userRepository: UserRepository) {}
 
 	public async updateUser({ secureId, ctx, userPayload }: UpdateUserOptionsDTO) {
 		const updateUserValidator = new UpdateUserValidator(ctx);
