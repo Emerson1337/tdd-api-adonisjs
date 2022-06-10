@@ -1,5 +1,5 @@
 import Database from '@ioc:Adonis/Lucid/Database';
-import { assert } from '@japa/preset-adonis';
+// import { assert } from '@japa/preset-adonis';
 import test from 'japa';
 import supertest from 'supertest';
 
