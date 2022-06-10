@@ -128,8 +128,6 @@ test.group('User', (group) => {
 			.send(userPayload)
 			.expect(200);
 
-		console.log(body.user, body.user.email, body.user.avatar, body.user.secure_id);
-
 		assert.exists(body.user, 'User undefined');
 		assert.equal(body.user.email, email);
 		assert.exists(body.user.avatar, avatar);

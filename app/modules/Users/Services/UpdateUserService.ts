@@ -6,9 +6,13 @@ import { UpdateUserOptionsDTO } from '../DTOs/UpdateUserOptionsDTO';
 import { UserRepository } from '../Repositories';
 
 export class UpdateUserService {
-	public async updateUser({ secureId, ctx, userPayload }: UpdateUserOptionsDTO) {
-		const userRepository: UserRepository = new UserRepository();
+	private userRepository: UserRepository;
 
+	constructor() {
+		this.userRepository = new UserRepository();
+	}
+
+	public async updateUser({ secureId, ctx, userPayload }: UpdateUserOptionsDTO) {
 		const updateUserValidator = new UpdateUserValidator(ctx);
 
 		await validator.validate({
@@ -16,13 +20,13 @@ export class UpdateUserService {
 			data: userPayload,
 		});
 
-		const userToUpdate = await userRepository.getUserBySecureId(secureId);
+		const userToUpdate = await this.userRepository.getUserBySecureId(secureId);
 
 		if (!userToUpdate) {
 			throw new BadRequest('User not found', 409);
 		}
 
-		const user = await userRepository.updateUser(secureId, userPayload);
+		const user = await this.userRepository.updateUser(secureId, userPayload);
 
 		return { user };
 	}

@@ -1,5 +1,5 @@
-import { UserUpdateDTO } from 'App/Interfaces/users/UserUpdateDTO';
 import { UserCreateDTO } from 'App/Interfaces/users';
+import { UserUpdateDTO } from 'App/Interfaces/users/UserUpdateDTO';
 import { User } from 'App/Models/User';
 
 export class UserRepository {
@@ -18,7 +18,7 @@ export class UserRepository {
 			user.avatar = userPayload.avatar;
 		}
 
-		user.save();
+		await user.save();
 
 		return user;
 	}

@@ -6,9 +6,13 @@ import { CreateUserOptionsDTO } from '../DTOs/CreateUserOptionsDTO';
 import { UserRepository } from '../Repositories';
 
 export class CreateUserService {
-	public async createUser({ ctx, userPayload }: CreateUserOptionsDTO) {
-		const userRepository: UserRepository = new UserRepository();
+	private userRepository: UserRepository;
 
+	constructor() {
+		this.userRepository = new UserRepository();
+	}
+
+	public async createUser({ ctx, userPayload }: CreateUserOptionsDTO) {
 		const createUserValidation = new CreateUserValidator(ctx);
 
 		await validator.validate({
@@ -16,19 +20,19 @@ export class CreateUserService {
 			data: userPayload,
 		});
 
-		const userEmailExists = await userRepository.getUserByEmail(userPayload.email);
+		const userEmailExists = await this.userRepository.getUserByEmail(userPayload.email);
 
 		if (userEmailExists) {
 			throw new BadRequest('email already in use', 409);
 		}
 
-		const usernameExists = await userRepository.getUserByUsername(userPayload.username);
+		const usernameExists = await this.userRepository.getUserByUsername(userPayload.username);
 
 		if (usernameExists) {
 			throw new BadRequest('username already in use', 409);
 		}
 
-		const user = await userRepository.createUser(userPayload);
+		const user = await this.userRepository.createUser(userPayload);
 
 		return { user };
 	}
