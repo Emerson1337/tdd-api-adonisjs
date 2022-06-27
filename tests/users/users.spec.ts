@@ -1,3 +1,4 @@
+import Hash from '@ioc:Adonis/Core/Hash';
 import Database from '@ioc:Adonis/Lucid/Database';
 // import { assert } from '@japa/preset-adonis';
 import test from 'japa';
@@ -132,6 +133,33 @@ test.group('User', (group) => {
 		assert.equal(body.user.email, email);
 		assert.exists(body.user.avatar, avatar);
 		assert.exists(body.user.secure_id, secure_id);
+	});
+
+	test('It should be able to update the user password', async (assert) => {
+		const user = await UserFactory.create();
+		const password = 'test';
+
+		const { body } = await supertest(BASE_URL)
+			.put(`/users/${user.secure_id}`)
+			.send({
+				email: user.email,
+				avatar: user.avatar,
+				password,
+			})
+			.expect(200);
+
+		assert.exists(body.user, 'User undefined');
+		assert.equal(body.user.secure_id, user.secure_id);
+		assert.isTrue(await Hash.verify(body.user.password, password));
+	});
+
+	test.only('It should return 422 to update user password when data is not provided', async (assert) => {
+		const { secure_id } = await UserFactory.create();
+
+		const { body } = await supertest(BASE_URL).put(`/users/${secure_id}`).send({}).expect(422);
+
+		assert.equal(body.code, 'BAD_REQUEST');
+		assert.equal(body.status, 422);
 	});
 
 	group.beforeEach(async () => {
