@@ -21,6 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route';
 
 import './users/usersRoutes';
+import './passwords/PasswordsRoutes';
 
 Route.get('/', async () => {
 	return { hello: 'world' };

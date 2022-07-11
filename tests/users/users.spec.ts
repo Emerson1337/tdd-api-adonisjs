@@ -153,7 +153,7 @@ test.group('User', (group) => {
 		assert.isTrue(await Hash.verify(body.user.password, password));
 	});
 
-	test.only('It should return 422 to update user password when data is not provided', async (assert) => {
+	test('It should return 422 to update user password when data is not provided', async (assert) => {
 		const { secure_id } = await UserFactory.create();
 
 		const { body } = await supertest(BASE_URL).put(`/users/${secure_id}`).send({}).expect(422);
