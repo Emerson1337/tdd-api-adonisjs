@@ -31,12 +31,6 @@ test.group('Password reset', (group) => {
 			})
 		);
 
-		// fakeMailer.exists((mail) => {
-		// 	assert.deepEqual(mail.to, [{ address: user.email }]);
-		// 	assert.equal(mail.subject, 'OCEMS: Recuperação de senha');
-		// 	return;
-		// });
-
 		fakeMailer.exists({ subject: 'OCEMS: Recuperação de senha' });
 
 		Mail.restore();
